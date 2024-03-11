@@ -2,12 +2,14 @@ package fr.bz.resources;
 
 import fr.bz.entities.UtilisateurEntity;
 import fr.bz.jwt.TokenGenerator;
+import fr.bz.repositories.UtilisateurRepository;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.Collections;
 
@@ -15,7 +17,8 @@ import java.util.Collections;
 public class AuthResources {
     @Inject
     JsonWebToken jwt;
-
+    @Inject
+    UtilisateurRepository utilisateurRepository;
     @POST
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
@@ -28,11 +31,11 @@ public class AuthResources {
     }
 
     private boolean isValidUser(String login, String password) {
-        // Implémentation de la validation des informations d'identification de base
-        // Vérifiez si l'utilisateur et le mot de passe sont valides
-        // Cela peut impliquer l'accès à une base de données ou à un service externe
-        // Dans cet exemple, nous faisons une validation basique
-        return "admin".equals(login) && "password".equals(password);
+        UtilisateurEntity utilisateur = utilisateurRepository.find("login", login).firstResult();
+        if (utilisateur == null || !BCrypt.checkpw(password, utilisateur.getPassword())) {
+            return false;
+        }
+        return true;
     }
 
 }
