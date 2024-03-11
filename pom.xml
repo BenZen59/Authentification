@@ -153,14 +153,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>container-license-acceptance.txt</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
     <profiles>
         <profile>
