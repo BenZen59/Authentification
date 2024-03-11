@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.Collections;
 
 @Path("/auth")
+@Produces(MediaType.APPLICATION_JSON)
 public class AuthResources {
     @Inject
     JsonWebToken jwt;
